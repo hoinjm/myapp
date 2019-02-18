@@ -18,92 +18,59 @@ const data = [
 ]
 
 
+const myStlye = {
+  textAlign : 'center'
+}
+
 
 
 class App extends Component {
 
+   constructor (props){
+     super (props)
+     this.state = {index : 0}
+     this.goNextNum = this.goNextNum.bind(this);
+     this.goPrevNum = this.goPrevNum.bind(this);
+
+  }
+
+  goNextNum (props){
+    this.setState ({index : this.state.index + 1})
+  }
+  
+  goPrevNum (props){
+    this.setState ({index : this.state.index - 1})
+  }
+
   render() {
 
-    const Yes = function(props){
-      return <h1>YES</h1>
-    }
-
-    const No = function(props){
-      return <h1>NO</h1>
-    }
-
-
-    const NumberListRender = ({number, spanish, english, onClick}) => (
-      <div onClick={onClick}>
-        <p>{number}</p>
-        <button onClick="NumberClick({spanish})">Spanish</button>
-        <button onClick>English</button>
-       <hr/>
-      </div>
-      )
-
-    
-
     return (
-      <div className = "App">
-        <h1>Español Número</h1>
-        <MySpanishNumber
-          boardId={()=> Math.random()}
-          data={data}
-          ListRender={NumberListRender}
-        />
+      <div>
+        <h1 style={myStlye}>Español Número</h1>
+        <MySpanishNumber data={data[this.state.index]} goNextNum={this.goNextNum} goPrevNum={this.goPrevNum}/>
 
-
-        <HolaWorld text= "Adios"/>
-        <HolaWorld text = "Buenas noches"/>
-        <HelloWorld Yes={Yes} No={No} myCurrentState={true}/>
-        <HelloWorld Yes={Yes} No={No} myCurrentState={false}/>
       </div>
     );
   }
 }
 
 
-function NumberClick (props){
-  const {num} = props
-    alert({num})
-
-}
-
-function HelloWorld(props){
-  const { Yes, No, myCurrentState } = props
-  return (
+function MySpanishNumber (props){
+  const {data, goNextNum, goPrevNum} = props
+  return(
     <div>
-      {myCurrentState ? <Yes/> : <No/>}
+      <h2 style ={myStlye}>{data.number}</h2>
+      <p style={myStlye}>{data.spanish}</p>
+      <p style={myStlye}>{data.english}</p>
+      <button onClick={()=>goPrevNum()} style={myStlye} >Prev Num</button>
+      <button onClick={goNextNum} style={myStlye}>Next Num</button>
     </div>
+    
+    
   )
+
 }
 
-function HolaWorld(props){
-  const {text} = props
-  return (
-    <h1>{text}</h1>
-  )
-}
-
-
-
-function MySpanishNumber(props){
-  const {boardId, data, ListRender, onClick} = props
-  return (
-    <div id={boardId()}>
-      {data.map(function(entry, entryIdx) {
-        return <ListRender
-          number={entry.number}
-          spanish={entry.spanish}
-          english={entry.english}
-          key={entryIdx}
-          onClick={onClick}
-        />       
-      })}
-    </div>
-  )
-}
 
 
 
